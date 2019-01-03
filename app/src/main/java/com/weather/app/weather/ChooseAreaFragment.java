@@ -2,6 +2,7 @@ package com.weather.app.weather;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,8 +68,9 @@ public class ChooseAreaFragment extends Fragment {
         return view;
     }
 
-   @Override
-    public void OnActivityCreated(Bundle savedInstanceState) {
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -102,7 +104,7 @@ public class ChooseAreaFragment extends Fragment {
      */
     private void queryProvince() {
         titleText.setText("中国");
-        backButton.setVisibility(View.GONE);
+        //backButton.setVisibility(View.GONE);
         provinceList = DataSupport.findAll(Province.class);
         if (provinceList.size() > 0) {
             dataList.clear();
@@ -123,7 +125,7 @@ public class ChooseAreaFragment extends Fragment {
      */
     private void queryCity() {
         titleText.setText(selectedProvince.getProvinceName());
-        backButton.setVisibility(View.GONE);
+        //backButton.setVisibility(View.GONE);
         cityList = DataSupport.where("provinceId=?", String.valueOf(selectedProvince.getId())).find(City.class);
         if (cityList.size() > 0) {
             dataList.clear();
@@ -145,7 +147,7 @@ public class ChooseAreaFragment extends Fragment {
      */
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
-        backButton.setVisibility(View.GONE);
+        //backButton.setVisibility(View.GONE);
         countyList = DataSupport.where("cityId=?", String.valueOf(selectedCity.getId())).find(County.class);
         if (countyList.size() > 0) {
             dataList.clear();
@@ -172,12 +174,13 @@ public class ChooseAreaFragment extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
+                System.out.println(responseText);
                 boolean result = false;
                 if ("province".equals(type)) {
                     result = Utility.handleProvinceResponse(responseText);
                 } else if ("city".equals(type)) {
                     result = Utility.handleCityResponse(responseText, selectedProvince.getId());
-                } else if ("county".equals(type)) {
+                } else if ("country".equals(type)) {
                     result = Utility.handleCountyResponse(responseText, selectedCity.getId());
                 }
                 if (result) {
@@ -185,7 +188,7 @@ public class ChooseAreaFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            showProgressDialog();
+                            closeProgressDialog();
                             if ("progress".equals(type)) {
                                 queryProvince();
                             } else if ("city".equals(type)) {
@@ -232,4 +235,5 @@ public class ChooseAreaFragment extends Fragment {
             progressDialog.dismiss();
         }
     }
+
 }
