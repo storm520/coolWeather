@@ -1,8 +1,7 @@
-package com.weather.app.weather.service;
+package com.weather.app.weather;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +13,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.weather.app.weather.R;
 import com.weather.app.weather.db.City;
 import com.weather.app.weather.db.County;
 import com.weather.app.weather.db.Province;
 import com.weather.app.weather.util.HttpUtil;
 import com.weather.app.weather.util.Utility;
-
 
 import org.litepal.crud.DataSupport;
 
@@ -70,7 +67,7 @@ public class ChooseAreaFragment extends Fragment {
         return view;
     }
 
-
+   @Override
     public void OnActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
